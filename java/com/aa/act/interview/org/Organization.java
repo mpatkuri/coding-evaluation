@@ -1,6 +1,8 @@
 package com.aa.act.interview.org;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Organization {
 
@@ -20,8 +22,28 @@ public abstract class Organization {
 	 * @return the newly filled position or empty if no position has that title
 	 */
 	public Optional<Position> hire(Name person, String title) {
-		//your code here
-		return Optional.empty();
+		if (title.equals(root.getTitle())) {
+			Employee employee = new Employee(ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE),  person);
+			root.setEmployee(Optional.of(employee));
+			return Optional.of(root);
+		}
+		Position p = null;
+		hireEmployee(root.getDirectReports(), title, person, p);
+		return Optional.ofNullable(p);
+	}
+
+	private void hireEmployee(Set<Position> directReports, String title, Name person, Position p1) {
+
+		for (Position p : directReports) {
+			if (title.equals(p.getTitle())) {
+				Employee employee = new Employee(ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE), person);
+				p.setEmployee(Optional.of(employee));
+				p1 = p;
+				return;
+			} else {
+				hireEmployee(p.getDirectReports(), title, person, p1);
+			}
+		}
 	}
 
 	@Override

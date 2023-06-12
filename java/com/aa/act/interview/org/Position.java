@@ -50,7 +50,7 @@ public class Position {
 		return directReports.remove(position);
 	}
 	
-	public Collection<Position> getDirectReports() {
+	public Set<Position> getDirectReports() {
 		return Collections.unmodifiableCollection(directReports);
 	}
 
